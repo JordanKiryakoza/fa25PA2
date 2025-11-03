@@ -59,14 +59,14 @@ struct MinHeap {
             int right = (pos*2)+2;
             int smallestVal = pos;
 
-            if (left < size && weightArr[data[left]] < weightArr[data[right]]) {
+            if (left < size && weightArr[data[left]] < weightArr[data[smallestVal]]) {
                 smallestVal = left;
             }
-            if (right < size && weightArr[data[right]] < weightArr[data[left]]) {
+            if (right < size && weightArr[data[right]] < weightArr[data[smallestVal]]) {
                 smallestVal = right;
             }
 
-            if (weightArr[data[pos]] <= weightArr[data[smallestVal]]) {
+            if (smallestVal == pos) {
                 break;
             }
             swap(data[pos], data[smallestVal]);

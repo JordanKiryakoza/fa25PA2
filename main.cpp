@@ -133,7 +133,10 @@ void generateCodes(int root, string codes[]) {
 
         //check if leaf nodes have no children
         if (leftArr[node] == -1 && rightArr[node] == -1) {
+            if (charArr[node] >= 'a' && charArr[node] <= 'z') {
                 codes[charArr[node] - 'a'] = code;
+            }
+
         } else {
             //else push right child first so left can be done first.
             if (rightArr[node] != -1) {
