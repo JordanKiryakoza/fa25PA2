@@ -20,7 +20,7 @@ struct MinHeap {
             return;
         }
         // TODO: insert index at end of heap, restore order using upheap()
-        weightArr[size] = idx;
+        data[size] = idx;
         upheap(size,weightArr);
         size++;
     }
@@ -32,8 +32,8 @@ struct MinHeap {
             cout << "Heap Is Empty!";
             return 0;
         }
-        int smallestVal = weightArr[0];
-        weightArr[0] = weightArr[size - 1];
+        int smallestVal = data[0];
+        data[0] = data[size - 1];
         size--;
         downheap(0, weightArr);
         return smallestVal; // placeholder
@@ -44,10 +44,10 @@ struct MinHeap {
         while (pos > 0) {
             int parent = (pos-1)/2;
 
-            if (weightArr[pos] >= weightArr[parent]) {
+            if (weightArr[data[pos]] >= weightArr[data[parent]]) {
                 break;
             }
-            swap(weightArr[pos], weightArr[parent]);
+            swap(data[pos], data[parent]);
             pos = parent;
         }
     }
@@ -57,15 +57,19 @@ struct MinHeap {
         while (true) {
             int left = (pos*2)+1;
             int right = (pos*2)+2;
-            int smallestVal = left;
+            int smallestVal = pos;
 
-            if (right < size && weightArr[right] < weightArr[left]) {
+            if (left < size && weightArr[data[left]] < weightArr[data[right]]) {
+                smallestVal = left;
+            }
+            if (right < size && weightArr[data[right]] < weightArr[data[left]]) {
                 smallestVal = right;
             }
-            if (weightArr[pos] <= weightArr[smallestVal]) {
+
+            if (weightArr[data[pos]] <= weightArr[data[smallestVal]]) {
                 break;
             }
-            swap(weightArr[pos], weightArr[smallestVal]);
+            swap(data[pos], data[smallestVal]);
             pos = smallestVal;
         }
     }
