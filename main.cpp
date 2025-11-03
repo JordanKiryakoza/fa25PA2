@@ -34,6 +34,8 @@ int main() {
     // Step 3: Build encoding tree using your heap
     int root = buildEncodingTree(nextFree);
 
+    cout << "Root index: " << root << "\n";
+
     // Step 4: Generate binary codes using an STL stack
     string codes[26];
     generateCodes(root, codes);
@@ -91,20 +93,58 @@ int createLeafNodes(int freq[]) {
 int buildEncodingTree(int nextFree) {
     // TODO:
     // 1. Create a MinHeap object.
+    MinHeap newheap;
     // 2. Push all leaf node indices into the heap.
+    for (int i = 0; i < nextFree; ++i) {
+        newheap.push(i, weightArr);
+    }
     // 3. While the heap size is greater than 1:
-    //    - Pop two smallest nodes
-    //    - Create a new parent node with combined weight
-    //    - Set left/right pointers
-    //    - Push new parent index back into the heap
+    //    - Pop two smallest nodes  1
+    //    - Create a new parent node with combined weight  2
+    //    - Set left/right pointers  3
+    //    - Push new parent index back into the heap  4
+    while (newheap.size > 1) {
+        int left = newheap.pop(weightArr);
+        int right = newheap.pop(weightArr);
+
+       weightArr[nextFree] = weightArr[left] + weightArr[right];
+
+        leftArr[nextFree] = left;
+        rightArr[nextFree] = right;
+
+
+        newheap.push(nextFree, weightArr);
+        nextFree++;
+
+    }
     // 4. Return the index of the last remaining node (root)
-    return -1; // placeholder
+    return newheap.pop(weightArr); // placeholder
 }
 
 // Step 4: Use an STL stack to generate codes
 void generateCodes(int root, string codes[]) {
     // TODO:
     // Use stack<pair<int, string>> to simulate DFS traversal.
+    stack<pair<int,string>> newstack;
+    newstack.push(make_pair(root, ""));
+    while (!newstack.empty()) {
+        auto [node, code] = newstack.top();
+        newstack.pop();
+
+        //check if leaf nodes have no children
+        if (leftArr[node] == -1 && rightArr[node] == -1) {
+                codes[charArr[node] - 'a'] = code;
+        } else {
+            //else push right child first so left can be done first.
+            if (rightArr[node] != -1) {
+                newstack.push({rightArr[node], code +"1"});
+            }
+            if (leftArr[node] != -1) {
+                newstack.push({leftArr[node], code +"0"});
+            }
+        }
+    }
+
     // Left edge adds '0', right edge adds '1'.
     // Record code when a leaf node is reached.
 }
