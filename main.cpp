@@ -99,20 +99,19 @@ int buildEncodingTree(int nextFree) {
         newheap.push(i, weightArr);
     }
     // 3. While the heap size is greater than 1:
-    //    - Pop two smallest nodes  1
-    //    - Create a new parent node with combined weight  2
-    //    - Set left/right pointers  3
-    //    - Push new parent index back into the heap  4
     while (newheap.size > 1) {
+        //    - Pop two smallest nodes
         int left = newheap.pop(weightArr);
         int right = newheap.pop(weightArr);
 
+        //    - Create a new parent node with combined weight
        weightArr[nextFree] = weightArr[left] + weightArr[right];
 
+        //    - Set left/right pointers
         leftArr[nextFree] = left;
         rightArr[nextFree] = right;
 
-
+        //    - Push new parent index back into the heap
         newheap.push(nextFree, weightArr);
         nextFree++;
 
@@ -128,10 +127,12 @@ void generateCodes(int root, string codes[]) {
     stack<pair<int,string>> newstack;
     newstack.push(make_pair(root, ""));
     while (!newstack.empty()) {
+        // read the stack as a structured binding instead of accessing first and second separately
         auto [node, code] = newstack.top();
+        // pop the pair out, and check if has children.
         newstack.pop();
 
-        //check if leaf nodes have no children
+        //check if nodes have no children, if so then they're leaf nodes
         if (leftArr[node] == -1 && rightArr[node] == -1) {
                 codes[charArr[node] - 'a'] = code;
 
@@ -143,6 +144,8 @@ void generateCodes(int root, string codes[]) {
             if (leftArr[node] != -1) {
                 newstack.push({leftArr[node], code +"0"});
             }
+            // after they're pushed, the loop will run again to check if they also have children, if not they are leafs.
+            // once the leaf nodes are pushed, there will be no more to add, and the stack will unwind.
         }
     }
 
